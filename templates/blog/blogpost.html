@@ -1,0 +1,46 @@
+{% extends 'home\base.html' %}
+
+{% block title %} Blogpost{% endblock title %}
+
+{% block body %}
+{% load humanize %}
+<div class="container my-3">
+
+        <h2 class="blog-post-title">{{post.title}}</h2>
+        <p class="blog-post-meta">{{post.timeStamp}} by <a href="/about">{{post.author}}</a></p>
+
+        <p>{{post.content}}</p>
+        <hr>
+      </div>
+        <div class="my-2">
+            {% if user.is_authenticated %}
+      <h2> Comments</h2>
+      <form action="/blog/postComment" method="post">
+      {% csrf_token %}
+          <div class="form-group">
+              <label for="exampleInputEmail1">Post Comment </label>
+      <input type="text" class="font-control" name="comment" placeholder="Enter comment here">
+        </div>
+          <input type="hidden" name="postSno" value="{{post.sno}}" >
+      <input type="submit" value="Submit">
+     </form>
+            {% else %}
+            Please login to post  a comment
+            {% endif %}
+        </div>
+<h2> Comments {{comments.cout}}</h2>
+
+            {% for comment in comment %}
+    <div class="row my-3">
+
+        <div class="col-md-1  ">
+        <img class="rounded mx-auto d-block w-100 p-2" src="/static/img/q.jpg"  alt="user">
+        </div>
+        <div class="col-md-11 ">
+        <b> {{comment.user.username}} </b> at {{comment.timestamp}}
+        <div>   {{comment.comment}} </div>
+    </div>
+    </div>
+    {% endfor %}
+</div>
+ {% endblock %}
